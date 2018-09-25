@@ -1,0 +1,17 @@
+The project duration is 1 week. It doesn't require actual coding, but requires detailed understanding of the problem with clear description of the solution.
+
+Task:
+Given a json dump of wikipedia provide description of your solution to find top 10 most influential articles. The data dump is located in S3 and is in standard wikimedia json format. 
+
+Hints: 
+Use Spark for processing, S3 for storage
+Use PageRank based on links within articles as influence rank
+Solution must be scalable and work for 10-100M articles
+Goal:
+Describe solution in power point presentation with sufficient details so it can be reviewed by a virtual architectural committee (think of group of architects and senior devs)
+Description should be detailed enough to include:
+Overal architecture (high level blocks)
+DataModel
+Open Source libs used if any (excluding those low-level which are part of frameworks)
+Any other information worth sharing/discussion
+Rough estimations in terms of hrs and $$ to run it on AWS

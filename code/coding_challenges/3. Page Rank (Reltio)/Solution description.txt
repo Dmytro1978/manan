@@ -1,0 +1,11 @@
+In the presentation I mainly focused on design and the logic rather than on describing the development steps. I also faced several issues and it affected the size and the content of presentation:
+
+1. Page rank algorithm. There are a lot of descriptions of page rank algorithm in the Internet and they all a little bit different. I have chose the one from Wikipedia. All descriptions only describe first iteration - 
+   calculation based on initial ranks of pages. I tried to makes second iteration using new calculated ranks and I saw the results were enough far from what they should really be, so I did not include further iterations 
+   in the presentation. For example, if page A has a rank of 0.625 (it has a lot of links to it from other pages) and it also has one outbound  link to page B then according to the algorithms in the Internet it should transfer 
+   its rank (0.625) to page B and B's rank would be PR(B) + PR(A) - that means it finally would be greater than A's page rank but it contradicts with main concepts of page rank theory (PR(B) can't be  greater than PR(A) because 
+   it only has one link from PR(A)).
+
+2. Wiki JSON data dump. I downloaded the file and learned it's structure. It does not contain the topology I need for the test. I couldn't find any outbound links to other pages. I searched the Internet and found that articles 
+   themselves are stored in XML files (not JSON). I did not have time to download and check those files so in the presentations I assumed that JSON dump contains all necessary content and "worked" with it.
+

@@ -4,7 +4,7 @@ where
     emplid = '101465205' and
     jc.jobcode = j.jobcode and
     dpt.deptid = j.deptid and
-    dpt.eff_status = 'A' and 
+    --dpt.eff_status = 'A' and 
     dpt.setid = 'USAID' and
     jc.effdt = (select max(jc1.effdt) from ps_jobcode_tbl jc1 where jc1.jobcode = jc.jobcode) and
     j.effseq = (select max(j1.effseq) from ps_job j1 where j.emplid = j1.emplid and j.effdt = j1.effdt) and
@@ -12,7 +12,7 @@ where
 order by j.effdt desc, j.effseq desc
 
 
-select * from ps_job
+select * from ps_job where emplid = '102152773' 
 
 select * from ps_jobcode_tbl
 

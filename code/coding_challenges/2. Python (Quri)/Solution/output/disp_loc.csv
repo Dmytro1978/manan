@@ -1,0 +1,49 @@
+display, location, count, total counts, prc
+Display4,Candy or Snacks,20,923,2.17%
+Display4,Frozen,46,923,4.98%
+Display4,Checkout Area,227,923,24.59%
+Display4,Produce,40,923,4.33%
+Display4,Bakery,15,923,1.63%
+Display4,Back of Store,196,923,21.24%
+Display4,Beverage,64,923,6.93%
+Display4,Dairy,16,923,1.73%
+Display4,Liquor,24,923,2.60%
+Display4,Deli/Meat,91,923,9.86%
+Display4,Other,78,923,8.45%
+Display4,Lobby,106,923,11.48%
+Display2,Candy or Snacks,151,4103,3.68%
+Display2,Frozen,149,4103,3.63%
+Display2,Checkout Area,944,4103,23.01%
+Display2,Bakery,97,4103,2.36%
+Display2,Lobby,416,4103,10.14%
+Display2,Back of Store,869,4103,21.18%
+Display2,Beverage,392,4103,9.55%
+Display2,Dairy,85,4103,2.07%
+Display2,Produce,198,4103,4.83%
+Display2,Deli/Meat,279,4103,6.80%
+Display2,Other,335,4103,8.16%
+Display2,Liquor,188,4103,4.58%
+Display3,Candy or Snacks,63,2100,3.00%
+Display3,Frozen,111,2100,5.29%
+Display3,Checkout Area,454,2100,21.62%
+Display3,Bakery,64,2100,3.05%
+Display3,Lobby,209,2100,9.95%
+Display3,Back of Store,477,2100,22.71%
+Display3,Produce,78,2100,3.71%
+Display3,Dairy,39,2100,1.86%
+Display3,Liquor,67,2100,3.19%
+Display3,Deli/Meat,157,2100,7.48%
+Display3,Other,186,2100,8.86%
+Display3,Beverage,195,2100,9.29%
+Display1,Candy or Snacks,273,7002,3.90%
+Display1,Frozen,194,7002,2.77%
+Display1,Checkout Area,1637,7002,23.38%
+Display1,Bakery,195,7002,2.78%
+Display1,Lobby,1068,7002,15.25%
+Display1,Back of Store,1222,7002,17.45%
+Display1,Beverage,627,7002,8.95%
+Display1,Dairy,159,7002,2.27%
+Display1,Produce,347,7002,4.96%
+Display1,Deli/Meat,429,7002,6.13%
+Display1,Other,519,7002,7.41%
+Display1,Liquor,332,7002,4.74%

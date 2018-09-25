@@ -1,0 +1,48 @@
+--truncate table mytime_china_amzn_actual_working_hours;
+set wlm_query_slot_count to 5;
+insert into mytime_china_amzn_actual_working_hours
+select
+  personid,
+  personnum,
+  employmentstatus,
+  username,
+  chinesename,
+  englishname,
+  hiredate,
+  terminationdate,
+  costcenter,
+  payrule,
+  repdate,
+  prolonged_sick_leave,
+  paid_sick_leave,
+  marriage_leave,
+  absence,
+  annual_leave,
+  personal_leave,
+  bereavement_leave,
+  maternity_leave,
+  unpaid_maternity_leave,
+  paternity_leave,
+  vto,
+  other_paid_leave,
+  other_unpaid_leave,
+  prenatal_examination_leave,
+  abortion_miscarriage_leave,
+  nursing_period,
+  pre_partum,
+  parental_leave,
+  non_holi_actual_working_hrs,
+  holi_actual_working_hrs,
+  non_holiday_ot,
+  weekend_ot,
+  daily_interns_worked_days,
+  hourly_interns_worked_hours,
+  night_shift_1,
+  night_shift_2,
+  etl_insert_timestamp,
+  locationcode,
+  prolong_personal_leave,
+  injured_leaves
+from vw_mytime_china_amzn_actual_working_hours;
+
+--commit;

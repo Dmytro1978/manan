@@ -1,0 +1,110 @@
+brand, location, count
+Michelob Ultra,Candy or Snacks,3
+Michelob Ultra,Frozen,11
+Michelob Ultra,Liquor,98
+Michelob Ultra,Checkout Area,16
+Michelob Ultra,Lobby,11
+Michelob Ultra,Back of Store,35
+Michelob Ultra,Produce,10
+Michelob Ultra,Bakery,5
+Michelob Ultra,Dairy,9
+Michelob Ultra,Deli/Meat,14
+Michelob Ultra,Other,21
+Michelob Ultra,Beverage,53
+Doritos,Candy or Snacks,92
+Doritos,,1
+Doritos,Frozen,30
+Doritos,Checkout Area,625
+Doritos,Bakery,46
+Doritos,Liquor,27
+Doritos,Back of Store,344
+Doritos,Produce,119
+Doritos,Dairy,41
+Doritos,Beverage,80
+Doritos,Deli/Meat,145
+Doritos,Other,170
+Doritos,Lobby,299
+Skittles,Candy or Snacks,31
+Skittles,Frozen,19
+Skittles,Checkout Area,96
+Skittles,Produce,6
+Skittles,Bakery,3
+Skittles,Liquor,2
+Skittles,Back of Store,34
+Skittles,Other,56
+Skittles,Dairy,4
+Skittles,Beverage,10
+Skittles,Deli/Meat,4
+Skittles,Lobby,30
+Bud Light,Candy or Snacks,19
+Bud Light,Frozen,79
+Bud Light,Checkout Area,189
+Bud Light,Bakery,51
+Bud Light,Lobby,129
+Bud Light,Back of Store,202
+Bud Light,Beverage,166
+Bud Light,Dairy,39
+Bud Light,Produce,63
+Bud Light,Deli/Meat,87
+Bud Light,Other,82
+Bud Light,Liquor,309
+Snickers,Candy or Snacks,62
+Snickers,Frozen,24
+Snickers,Liquor,5
+Snickers,Checkout Area,146
+Snickers,Back of Store,58
+Snickers,Beverage,15
+Snickers,Bakery,5
+Snickers,Dairy,14
+Snickers,Produce,5
+Snickers,Deli/Meat,9
+Snickers,Other,85
+Snickers,Lobby,37
+Tostitos,Candy or Snacks,115
+Tostitos,Beverage,109
+Tostitos,Frozen,113
+Tostitos,Checkout Area,518
+Tostitos,Bakery,61
+Tostitos,Back of Store,543
+Tostitos,Produce,135
+Tostitos,Dairy,45
+Tostitos,Liquor,56
+Tostitos,Deli/Meat,178
+Tostitos,Other,155
+Tostitos,Lobby,309
+Pepsi,Candy or Snacks,73
+Pepsi,Frozen,89
+Pepsi,Beverage,267
+Pepsi,Bakery,77
+Pepsi,Lobby,413
+Pepsi,Back of Store,526
+Pepsi,Produce,139
+Pepsi,Dairy,52
+Pepsi,Liquor,52
+Pepsi,Deli/Meat,166
+Pepsi,Other,204
+Pepsi,Checkout Area,685
+Mtn Dew,Candy or Snacks,54
+Mtn Dew,Frozen,71
+Mtn Dew,Checkout Area,506
+Mtn Dew,Back of Store,435
+Mtn Dew,Lobby,301
+Mtn Dew,Liquor,33
+Mtn Dew,Bakery,52
+Mtn Dew,Other,166
+Mtn Dew,Dairy,43
+Mtn Dew,Produce,113
+Mtn Dew,Deli/Meat,134
+Mtn Dew,Beverage,228
+Cola,Candy or Snacks,57
+Cola,Frozen,64
+Cola,Checkout Area,474
+Cola,Back of Store,585
+Cola,Liquor,28
+Cola,Bakery,70
+Cola,Beverage,348
+Cola,Dairy,50
+Cola,Produce,73
+Cola,Deli/Meat,218
+Cola,Other,179
+Cola,Lobby,264

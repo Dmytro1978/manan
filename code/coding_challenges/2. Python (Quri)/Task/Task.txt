@@ -1,0 +1,7 @@
+There is a csv file with data from a Superbowl audit we did for marketing purposes. We went out and checked if there were displays up for 
+brands that sell snacks. We asked if there was a display multiple times per brand (4 times per). The header for that row will look something like:
+<column-16.png>. Which is a Yes or No answer (first question like this is column 16)
+First thing I would like to see is code that calculates per brand, what percentage of stores had at least 1 display found.
+Second, of those stores with at least one display, what were the locations of those displays, as a percentage.
+<Column-R.png> (column R)
+Last thing is just take a look at the whole dataset and find insights on your own. Graphs are welcome.

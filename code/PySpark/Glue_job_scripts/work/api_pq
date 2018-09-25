@@ -1,0 +1,89 @@
+import sys
+import boto3
+import time
+from datetime import datetime
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+def date_to_partition_format(p_date, p_format):
+    date_str = datetime.strptime(p_date, p_format)
+    return "%s%02d" % (date_str.year, date_str.month)
+
+#this function executes for each row
+def modify_line(next_line):
+
+    dt_prt = date_to_partition_format(next_line["col0"], '%Y-%m-%d %H:%M:%S%f')
+    
+    #do any transformation here:
+    
+    new_line={}
+    for key,value in next_line.iteritems():
+        new_line[key] = value
+        
+    new_line["dt"] = dt_prt
+    
+    return new_line
+    
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME','p_data_lake_bucket','p_landing_zone_db'])
+
+p_data_lake_bucket = args["p_data_lake_bucket"]
+p_landing_zone_db = args["p_landing_zone_db"]
+
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+## @type: DataSource
+## @args: [database = "tmp-landing-zone", table_name = "api", transformation_ctx = "datasource0"]
+## @return: datasource0
+## @inputs: []
+datasource0 = glueContext.create_dynamic_frame.from_catalog(database = p_landing_zone_db, table_name = "api", transformation_ctx = "datasource0")
+
+#convert to DataFrame to retrieve date values (YYYY-MM-DD) to generate partition names (dt=YYYYMM)
+data_frame = datasource0.toDF()
+
+#retrieve values for TRANS_DATE column
+date_lst = data_frame.select("col0").collect()
+
+s3 = boto3.resource('s3')
+bucket = s3.Bucket(p_data_lake_bucket)
+
+#generate a list of partitions
+prt_dic = {}
+for date_item in date_lst:
+    dt_prt = date_to_partition_format(date_item[0], '%Y-%m-%d %H:%M:%S%f')
+    prt_dic[dt_prt] = dt_prt #adding to the dictionary eliminates duplicates 
+
+#delete partitions
+for prt_key in prt_dic:
+    
+    objects_to_delete = []
+    for obj in bucket.objects.filter(Prefix='oracle/parquet/api/dt='+ prt_key + '/'):
+        objects_to_delete.append({'Key': obj.key})
+
+    #objects_to_delete.append({'Key': target_bucket})
+    if len(objects_to_delete) > 0:
+        bucket.delete_objects(
+            Delete={
+                'Objects': objects_to_delete
+            }
+        )
+        
+time.sleep(10) #wait for folders in S3 to be deleted
+
+transformed_frame = Map.apply(frame=datasource0, f=modify_line, transformation_ctx = "transformed_frame")
+
+applymapping1 = ApplyMapping.apply(frame = transformed_frame, mappings = [("col0", "string", "col0", "string"), ("col1", "string", "col1", "string"), ("col2", "string", "col2", "string"), ("col3", "string", "col3", "string"), ("col4", "string", "col4", "string"), ("col5", "long", "col5", "long"), ("col6", "long", "col6", "long"), ("col7", "long", "col7", "long"), ("col8", "long", "col8", "long"), ("col9", "long", "col9", "long"), ("col10", "string", "col10", "string"), ("col11", "string", "col11", "string"), ("col12", "string", "col12", "string"), ("col13", "string", "col13", "string"), ("dt", "string", "dt", "string") ], transformation_ctx = "applymapping1")
+
+resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", transformation_ctx = "resolvechoice2")
+
+dropnullfields3 = DropNullFields.apply(frame = resolvechoice2, transformation_ctx = "dropnullfields3")
+
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://“+ p_data_lake_bucket +”/oracle/parquet/api", "partitionKeys": ["dt"]}, format = "parquet", transformation_ctx = "datasink4")
+job.commit()
