@@ -1,0 +1,10 @@
+The program (challenge_program.py) is written in Python 2.7.11. It reads the file you provided and creates four output files:
+1. brand_store.csv - percentage of stores per brand that had at least 1 display found;
+2. disp_loc.csv - percentage of locations per display of stores that had at least 1 display found;
+3. brand_loc.csv - number of locatons per brand of stores that had at least 1 display found;
+4. retl_disp.csv - number of displays per display type per retailer.
+
+All output files are created in the 'output' folder. If the folder does not exists it will be created  automatically. Input file should be placed in the same folder where the program is located. 
+
+The code uses two classes - Store and Brand. Class Store represents a store with basic information about it and a list of brands (list of Brand classes). Class Brand represents a brand with information about displays, locations and answers from the survey. All data transformations are performed with the help of lists and dictionaries. I tried to make the code scalable, so new brands can be added to input file (the only thing that should be done is adding column numbers of new brand to brandInfoList in the code. Currently this list is hardcoded but it can be moved out to a file. I've chosen  to hardcode it because such flexibility was not a part of the task). I did not try to add new brands, it would take more time to test it.
+

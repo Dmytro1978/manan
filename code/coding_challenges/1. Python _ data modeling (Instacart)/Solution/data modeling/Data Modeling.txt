@@ -1,0 +1,103 @@
+Hi.
+
+ Please find designed DWH schema in the following diagrams:
+  - Dimension tables - contains all dimension tables;
+  - Fact tables - contains all fact tables;
+  - Common - contains all tables and relationships between them;
+  - ORDER - describes F_ORDER table;
+  - SHIPMRNT - describes F_SHIPMENT table;
+  - RETURN - describes F_RETURN table.
+
+ Dimenstions are divided into two types:
+  - Static dimenstions - L_ORDER_STATUS, L_DATE, L_RETURN_REASON, L_ADMIN - the data in these tables is static and added manually when needed.
+  - Dynamic dimenstions - L_USER, L_PRODUCT, L_VARIANT,  - the data is loaded by ETL processes. All these dimensions are SCD2 type dimensions. They have 
+    EFFECTINE_START_DATE and EFFECTIVE_END_DATE and also CURRENT_FLAG. I thought that product and customer data is important and hence worth to have a history.
+    Current record for such tables contains CURRENT_FLAG='Y' and EFFECTIVE_END_DATE='12/31/9999'. 
+     
+ Each fact table contains set of fields which is common for all fact tables: 
+  - surrogate key (with the suffix "_KEY");
+  - ETL_LOAD_DATE (time when record was created in the table); 
+  - unique key (ID) from source table for back tracking;
+  - DAY_ID (reference to L_DATE table). The source value is a truncated "update_date_time" value from corresponding source table;
+  - Transaction date - "update_date_time" value from corresponding source table (not truncated).  
+ Other fields were transferred as is. 
+ 
+ Below you can find descriptions of main tables:
+ 
+ F_ORDER table:
+  - ORDER_KEY - surrogate key;
+  - ID - id from source;
+  - DAY_KEY - reference to L_DATE table. Source value: trunc("update_date_time") from source table;
+  - ORDER_STATUS_KEY - reference to L_ORDER_STATUS.ORDER_STATUS_KEY;
+  - USER_KEY - reference to L_USER table;
+  - ORDER_TIME - "update_date_time" from source table;
+  - CHARGE_AMOUNT - as is;
+  - TAX_AMOUNT - as is;
+  - COUPON_AMOUNT - as is;
+  - ETL_LOAD_DATE - when record was created.
+  
+ F_SHIPMENT table:
+  - SHIPMENT_KEY - surrogate key;
+  - ID - id from source;
+  - ORDER_KEY - reference to F_ORDER.ORDER_KEY;
+  - DAY_KEY - reference to L_DATE table. Source value: trunc("update_date_time") from source table;
+  - SHIPMENT_TIME - "update_date_time" from source table;
+  - START_DAY_KEY - reference to L_DATE;
+  - FINISH_DAY_KEY - reference to L_DATE;
+  - NUM_PACKAGES - as is;
+  - SHIPPING_CHARGE - as is;
+  - GIFT_FLAG - possible values - Y/N;
+  - SHIPPING_ADDRESS - as is;
+  - RECIPIENT_NAME - as is;
+  - ETL_LOAD_DATE - when record was created.
+  
+ F_RETURN table:
+  - RETURN_KEY - surrogate key;
+  - ID - id from source;
+  - RETURN_REASON_KEY - reference to L_RETURN_REASON.RETURN_REASON_KEY;
+  - ITEM_KEY - reference to F_ITEM.ITEM_KEY;
+  - DAY_KEY - reference to L_DATE table. Source value: trunc("update_date_time") from source table;
+  - RETURN_TIME - "update_date_time" from source table; 
+  - APPROVAL_FLAG - possible values - Y/N;
+  - AMOUNT_REFUNDED - as-is;
+  - ADMIN_KEY - reference to L_ADMIN table;
+  - ETL_LOAD_DATE - when record was created.
+  
+ F_ITEM table: 
+  - ITEM_KEY - surrogate key;
+  - ID - id from source;
+  - DAY_KEY - reference to L_DATE table. Source value: trunc("update_date_time") from source table;  
+  - VARIANT_KEY - reference to L_VARIANT table;
+  - ORDER_KEY - reference to F_ORDER table;
+  - SALE_PRICE - as is;
+  - QUANTITY_ORDERED - as is;
+  - QUANTITY_OVERSOLD - as is;
+  - ITEM_TIME - "update_date_time" from source table;
+  - ETL_LOAD_DATE - when record was created.
+  
+ L_USER table:
+  - USER_KEY - surrogate key;
+  - ID - id from source;
+  - USER_FIRST_NAME - as is;
+  - USER_LAST_NAME - as is;
+  - VIP_FLAG -  possible values - Y/N;
+  - ADDRESS - as is;
+  - LAST_PURCHASE - as is;
+  - EFFECTIVE_START_DATE - time when the record became effective;
+  - EFFECTIVE_END_DATE DATE - time when the record was closed. '12/31/2016' for current record;
+  - CURRENT_FLAG - indicates current record, possible values - Y/N;
+  - ETL_LOAD_DATE - when record was created.
+  
+ L_PRODUCT table:
+  - PRODUCT_KEY - surrogate key;
+  - ID - id from source;
+  - PRODUCT_DESC - as is;
+  - MSRP - as is;
+  - EFFECTIVE_START_DATE - time when the record became effective;
+  - EFFECTIVE_END_DATE DATE - time when the record was closed. '12/31/2016' for current record;
+  - CURRENT_FLAG - indicates current record, possible values - Y/N;
+  - ETL_LOAD_DATE - when record was created.
+  
+ I also created DDLs (for Oracle DB) for all tables. You can find them in ddl_oracle.sql
+ Scripts that calculate sample metrics are located in sql_scripts_oracle.sql.
+ I used MySQL Workbench to create diagrams, so I also attached the diagram file - DWH diagram.mwb

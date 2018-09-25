@@ -1,0 +1,60 @@
+import boto3
+import sys
+import time
+from awsglue.transforms import *
+from awsglue.utils import getResolvedOptions
+from pyspark.context import SparkContext
+from awsglue.context import GlueContext
+from awsglue.job import Job
+
+## @params: [JOB_NAME]
+args = getResolvedOptions(sys.argv, ['JOB_NAME','p_data_lake_bucket','p_landing_zone_db'])
+
+p_data_lake_bucket = args["p_data_lake_bucket"]
+p_landing_zone_db = args["p_landing_zone_db"]
+
+sc = SparkContext()
+glueContext = GlueContext(sc)
+spark = glueContext.spark_session
+job = Job(glueContext)
+job.init(args['JOB_NAME'], args)
+
+
+s3 = boto3.resource('s3')
+bucket = s3.Bucket(p_data_lake_bucket)
+
+#delete entire tanle in S3
+objects_to_delete = []
+for obj in bucket.objects.filter(Prefix='oracle/parquet/org/'):
+    objects_to_delete.append({'Key': obj.key})
+
+#objects_to_delete.append({'Key': target_bucket})
+if len(objects_to_delete) > 0:
+    bucket.delete_objects(
+        Delete={
+            'Objects': objects_to_delete
+        }
+    )
+    time.sleep(10)
+
+client = boto3.client('s3')
+
+#create empty folder
+response = client.put_object(
+    Bucket=p_data_lake_bucket,
+    Body='',
+    Key='oracle/parquet/org/'
+)
+
+time.sleep(5)
+
+datasource0 = glueContext.create_dynamic_frame.from_catalog(database = p_landing_zone_db, table_name = "org", transformation_ctx = "datasource0")
+
+applymapping1 = ApplyMapping.apply(frame = datasource0, mappings = [("col0", "string", "col0", "string"), ("col1", "string", "col1", "string"), ("col2", "string", "col2", "string"), ("col3", "string", "col3", "string"), ("col4", "string", "col4", "string"), ("col5", "long", "col5", "long"), ("col6", "string", "col6", "string"), ("col7", "long", "col7", "long"), ("col8", "long", "col8", "long"), ("col9", "string", "col9", "string"), ("col10", "long", "col10", "long"), ("col11", "long", "col11", "long"), ("col12", "long", "col12", "long"), ("col13", "string", "col13", "string"), ("col14", "string", "col14", "string"), ("col15", "string", "col15", "string"), ("col16", "long", "col16", "long"), ("col17", "long", "col17", "long"), ("col18", "string", "col18", "string"), ("col19", "string", "col19", "string"), ("col20", "string", "col20", "string"), ("col21", "string", "col21", "string"), ("col22", "string", "col22", "string"), ("col23", "string", "col23", "string"), ("col24", "string", "col24", "string"), ("col25", "string", "col25", "string"), ("col26", "string", "col26", "string"), ("col27", "string", "col27", "string"), ("col28", "string", "col28", "string"), ("col29", "string", "col29", "string"), ("col30", "string", "col30", "string"), ("col31", "long", "col31", "long"), ("col32", "long", "col32", "long"), ("col33", "string", "col33", "string"), ("col34", "long", "col34", "long"), ("col35", "string", "col35", "string"), ("col36", "long", "col36", "long"), ("col37", "long", "col37", "long"), ("col38", "long", "col38", "long"), ("col39", "long", "col39", "long"), ("col40", "long", "col40", "long"), ("col41", "long", "col41", "long"), ("col42", "long", "col42", "long"), ("col43", "string", "col43", "string"), ("col44", "long", "col44", "long"), ("col45", "long", "col45", "long"), ("col46", "long", "col46", "long"), ("col47", "long", "col47", "long"), ("col48", "long", "col48", "long")], transformation_ctx = "applymapping1")
+
+resolvechoice2 = ResolveChoice.apply(frame = applymapping1, choice = "make_struct", transformation_ctx = "resolvechoice2")
+
+dropnullfields3 = DropNullFields.apply(frame = resolvechoice2, transformation_ctx = "dropnullfields3")
+
+datasink4 = glueContext.write_dynamic_frame.from_options(frame = dropnullfields3, connection_type = "s3", connection_options = {"path": "s3://“+ p_data_lake_bucket +”/oracle/parquet/org"}, format = "parquet", transformation_ctx = "datasink4")
+job.commit()
