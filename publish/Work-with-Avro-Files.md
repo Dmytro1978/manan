@@ -1,54 +1,61 @@
 # Work with Avro Files
 
+This short article describes how to transfer data from Oracle database to S3 using Apache Sqoop utitlity. The data will be stored in Avro data format. 
+
+The data transfer was done using following technologies:
+- Apache Sqoop 1.4.7;
+- Oracle 12c;
+- Amazon EMR 5.16.0 (Hadoop distribution 2.8.4).
+
 ## Sqoop command to store data in Avro format
 
-Apache Sqoop supports Avro file format. To store data in Avro following parameters should be added to Sqoop command: 
+Apache Sqoop 1.4.6 supports Avro data files. To store data in Avro format following parameters should be added to Sqoop command: 
 
 ```shell
---as-avrodatafile
---compression-codec snappy #(optional)
+--as-avrodatafile # imports data to Avro data files 
+--compression-codec snappy # use Hadoop codec (in this case - snappy)
 ```
-The template of Sqoop command is following:
+The template of a Sqoop command is following:
 
 ```shell
-    sqoop import \
-            --bindir ./ \
-            --connect 'jdbc:sqlserver://<host>:<port>;databasename=<database_name>' \
-                # 'jdbc:oracle:thin:<username>/password@<host>:<port>/<instance_name>'
-                # 'jdbc:jtds:sqlserver://<host>:<port>/<database_name>' - this is for SQL Server 2000
-            --username <username> \
-            --driver <driver_class> # used to explicitly setting the driver
-                                    # example: --driver net.sourceforge.jtds.jdbc.Driver
-            --connection-manager # 
-              #example: --connection-manager org.apache.sqoop.manager.SQLServerManager
-            --password <password> \
-            --num-mappers <n> \
-            --fields-terminated-by '\t' \ # used for CSV, useless in Avro
-            --lines-terminated-by '\n' \  # used for CSV, useless in Avro 
-            --as-avrodatafile \           # to store data in Avro format
-            --compression-codec snappy \ 
-            --options-file ${work_dir}/${sqoop_opt_file} \
-            --split-by <field_name> \ # only used if number of mappers > 1
-            --target-dir s3://<path> \
-               # example for HDFS: --target-dir hdfs:///<path>
-            --null-string '' \
-            --null-non-string ''
-            --boundary-query # if used then --split-by should also be present 
+sqoop import \
+  --bindir ./ \
+  --connect 'dbc:oracle:thin:<username>/password@<host>:<port>/<instance_name>' \     
+      # 'jdbc:sqlserver://<host>:<port>;databasename=<database_name>' \ # SQL Server 2008 and higher
+      # 'jdbc:jtds:sqlserver://<host>:<port>/<database_name>' \ - #SQL Server 2000 \
+  --username <username> \
+  --driver <driver_class> # manually specify JDBC driver class to use
+                          # example: --driver net.sourceforge.jtds.jdbc.Driver
+  --connection-manager # Specify connection manager class to use
+                       # example: --connection-manager org.apache.sqoop.manager.SQLServerManager
+  --password <password> \
+  --num-mappers <n> \
+  --fields-terminated-by '\t' \ # sets the field separator character
+  --lines-terminated-by '\n' \  # sets the end-of-line character
+  --as-avrodatafile \           # imports data to Avro data files
+  --compression-codec snappy \  # use Hadoop codec (in this case - snappy)
+  --options-file <path_to_options_file> \
+  --split-by <field_name> \ # only used if number of mappers > 1
+  --target-dir s3://<path> \
+      # example for HDFS: --target-dir hdfs:///<path>
+  --null-string '' \
+  --null-non-string ''
+  --boundary-query # if used then --split-by should also be present 
 ```
 
-Example:
+Example for Oracle:
 
 ```shell
-    sqoop import \
-     -Dmapreduce.job.user.classpath.first=true \
-     --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
-     --num-mappers 1 \
-     --query 'select * from employee where $CONDITIONS' \
-     --target-dir s3://mdmytro-dw/staging/employee \
-     --as-avrodatafile \
-     --compression-codec snappy \
-     --null-string '' \
-     --null-non-string '' 
+sqoop import \
+  -Dmapreduce.job.user.classpath.first=true \
+  --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
+  --num-mappers 1 \
+  --query 'select * from employee where $CONDITIONS' \
+  --target-dir s3://my-bucket/staging/employee \
+  --as-avrodatafile \
+  --compression-codec snappy \
+  --null-string '' \
+  --null-non-string '' 
 ```
 
 Sqoop can transfer data to either Hadoop (HDFS) or AWS (S3). To query transferred data you need to create tables on top of physical files. If the data was transferred to Hadoop you can create Hive tables. If the data was transferred to S3 you can create either Hive tables of Amazon Athena tables. In both cases you will need a table schema which you can retrieve from physical files.
@@ -75,15 +82,15 @@ You can also create a table in S3:
 ```sql
 CREATE EXTERNAL TABLE employee
 STORED AS AVRO
-location 's3://mdmytro-dw/staging/employee'
+location 's3://my-bucket/staging/employee'
 TBLPROPERTIES ('avro.schema.url'='hdfs:///user/hive/warehouse/avsc/employee.avsc');
 ```
 You can even keep a table schema in S3:
 ```sql
 CREATE EXTERNAL TABLE employee
 STORED AS AVRO
-location 's3://mdmytro-dw/staging/employee'
-TBLPROPERTIES ('avro.schema.url'='s3://mdmytro-dw/staging/avsc/employee.avsc');
+location 's3:/my-bucket/staging/employee'
+TBLPROPERTIES ('avro.schema.url'='s3://my-bucket/staging/avsc/employee.avsc');
 ```
 
 The Avro schema for EMPLOYEE table looks like this:
@@ -156,7 +163,7 @@ Amazon Athena does not support table property ***avro.schema.url*** - the schema
       UPDATE_DATE bigint
     )
     STORED AS AVRO
-    LOCATION 's3://mdmytro-dw/staging/employees'
+    LOCATION 's3://my-bucket/staging/employees'
     TBLPROPERTIES (
     'avro.schema.literal'='
     {
@@ -246,17 +253,17 @@ id  name    age  gen  create_date    process_name  update_date
 
 The result dataset using timestamp conversion:
 ```sql
-    hive> select 
-        >     id, name, age, gen, 
-        >     from_unixtime(create_date div 1000) as create_date, 
-        >     process_name, 
-        >     from_unixtime(update_date div 1000) as update_date 
-        > from employee limit 2;
-    OK
-    id  name    age  gen  create_date          process_name  update_date
-    --  ----    ---  ---  -----------          ------------  -----------
-    2   John    30   M    2018-09-30 00:00:52  BACKFILL      2018-09-30 01:07:39
-    3   Jennie  25   F    2018-09-30 00:00:52  BACKFILL      2018-09-30 01:07:39
+hive> select 
+    >     id, name, age, gen, 
+    >     from_unixtime(create_date div 1000) as create_date, 
+    >     process_name, 
+    >     from_unixtime(update_date div 1000) as update_date 
+    > from employee limit 2;
+OK
+id  name    age  gen  create_date          process_name  update_date
+--  ----    ---  ---  -----------          ------------  -----------
+2   John    30   M    2018-09-30 00:00:52  BACKFILL      2018-09-30 01:07:39
+3   Jennie  25   F    2018-09-30 00:00:52  BACKFILL      2018-09-30 01:07:39
 ```
 **Important**: In Hive if reserved words are used as column names (like timestamp) use backquotes:
 
@@ -278,7 +285,7 @@ When creating Athena table all ***long*** fields should be created as ***bigint*
       UPDATE_DATE bigint
     )
     STORED AS AVRO
-    LOCATION 's3://mdmytro-dw/staging/employee'
+    LOCATION 's3://my-bucket/staging/employee'
     TBLPROPERTIES (
     'avro.schema.literal'='
     {
@@ -369,7 +376,7 @@ id  name    age  gen  create_date              process_name  update_date
 If you do not want to convert timestamp from Unix time every time you run a query, you can store timestamp values as text by adding following parameter to Sqoop
 
 ```
-    --map-column-java CREATE_DATE=String,UPDATE_DATE=String
+--map-column-java CREATE_DATE=String,UPDATE_DATE=String
 ```
 After applying this parameter and running Sqoop the table schema will look like this:
 ```json
@@ -426,18 +433,18 @@ After applying this parameter and running Sqoop the table schema will look like 
 Note, that fields columns in the table schema are defined as string.
 
 Sqoop command for storing timestamp fields in string format:
-```python
-    sqoop import \
-     -Dmapreduce.job.user.classpath.first=true \
-     --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
-     --num-mappers 1 \
-     --query 'select * from employee where $CONDITIONS' \
-     --target-dir hdfs:///mdmytro-dw/staging/employee_ts_str \
-     --as-avrodatafile \
-     --compression-codec snappy \
-     --null-string '' \
-     --null-non-string '' \
-     --map-column-java CREATE_DATE=String,UPDATE_DATE=String
+```shell
+sqoop import \
+  -Dmapreduce.job.user.classpath.first=true \
+  --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
+  --num-mappers 1 \
+  --query 'select * from employee where $CONDITIONS' \
+  --target-dir hdfs:///my-bucket/staging/employee_ts_str \
+  --as-avrodatafile \
+  --compression-codec snappy \
+  --null-string '' \
+  --null-non-string '' \
+  --map-column-java CREATE_DATE=String,UPDATE_DATE=String
 ```
 ### Hive
 Create new table in Hive using this new table schema:
@@ -471,7 +478,7 @@ Create new table in Amazon Athena using this new table schema:
       UPDATE_DATE string
     )
     STORED AS AVRO
-    LOCATION 's3://mdmytro-dw/staging/employee_ts_str'
+    LOCATION 's3://my-bucket/staging/employee_ts_str'
     TBLPROPERTIES (
     'avro.schema.literal'='
     {
@@ -547,7 +554,7 @@ hadoop jar avro-tools-1.8.1.jar part-m-00000.avro part-m-00001.avro cons_file.av
 ```
 Files can be local or in S3:
 ```python
-hadoop jar avro-tools-1.8.1.jar concat s3://mdmytro-dw/staging/employee/part-m-00000.avro s3://mdmytro-dw/staging/employee/part-m-00001.avro s3://mdmytro-dw/staging/employee/employee_final.avro
+hadoop jar avro-tools-1.8.1.jar concat s3://my-bucket/staging/employee/part-m-00000.avro s3://my-bucket/staging/employee/part-m-00001.avro s3://my-bucket/staging/employee/employee_final.avro
 ```
 
 ## Data types in Java and Hive
