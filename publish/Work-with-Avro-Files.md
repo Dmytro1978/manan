@@ -9,7 +9,7 @@ The data transfer was done using following technologies:
 
 ## Sqoop command to store data in Avro format
 
-Apache Sqoop 1.4.6 supports Avro data files. To store data in Avro format following parameters should be added to Sqoop command: 
+Apache Sqoop 1.4.7 supports Avro data files. To store data in Avro format following parameters should be added to Sqoop command: 
 
 ```shell
 --as-avrodatafile # imports data to Avro data files 
@@ -66,7 +66,7 @@ If Sqoop 1.4.6 (EMR 5.13.0) or lower is used then the table schema can be retrie
 java -jar avro-tools-1.8.1.jar getschema part-m-00000.avro > employee.avsc
 ```
 
-Note, that Avro file (part-m-00000.avro) should only be local or in HDFS, not in S3.
+Note, that Avro file (*part-m-00000.avro*) should only be local or in HDFS, not in S3.
 
 ## Create Avro table in Hive
 
