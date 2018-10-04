@@ -2,15 +2,15 @@
 
 ## Sqoop command to store data in Avro format
 
-Apache Sqoop supports Avro file format. To store data in Avro following parameters should be used: 
+Apache Sqoop supports Avro file format. To store data in Avro following parameters should be added to Sqoop command: 
 
-```python
+```shell
 --as-avrodatafile
 --compression-codec snappy #(optional)
 ```
 The template of Sqoop command is following:
 
-```python
+```shell
     sqoop import \
             --bindir ./ \
             --connect 'jdbc:sqlserver://<host>:<port>;databasename=<database_name>' \
@@ -38,10 +38,10 @@ The template of Sqoop command is following:
 
 Example:
 
-```python
+```shell
     sqoop import \
      -Dmapreduce.job.user.classpath.first=true \
-     --connect "jdbc:oracle:thin:admin_user/Passw0rd1@oradbinstance-1.cxgoy0cgjzah.us-west-2.rds.amazonaws.com:1521/orcl" \
+     --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
      --num-mappers 1 \
      --query 'select * from employee where $CONDITIONS' \
      --target-dir s3://mdmytro-dw/staging/employee \
@@ -429,7 +429,7 @@ Sqoop command for storing timestamp fields in string format:
 ```python
     sqoop import \
      -Dmapreduce.job.user.classpath.first=true \
-     --connect "jdbc:oracle:thin:admin_user/Passw0rd1@oradbinstance-1.cxgoy0cgjzah.us-west-2.rds.amazonaws.com:1521/orcl" \
+     --connect "jdbc:oracle:thin:user/password@host_address.com:1521/orcl" \
      --num-mappers 1 \
      --query 'select * from employee where $CONDITIONS' \
      --target-dir hdfs:///mdmytro-dw/staging/employee_ts_str \
