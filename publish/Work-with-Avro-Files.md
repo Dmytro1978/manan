@@ -1,5 +1,5 @@
 # Work with Avro Files
-© 2018 Dmytro Manannykov
+by Dmytro Manannykov | 05 OCT 2018
 
 This short article describes how to transfer data from Oracle database to S3 using Apache Sqoop utitlity. The data will be stored in Avro data format. 
 
