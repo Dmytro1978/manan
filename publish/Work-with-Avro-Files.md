@@ -173,7 +173,7 @@ The Avro schema for EMPLOYEE table looks like this:
     }
 ```
 
-Note, that all timestamp columns are defined as ***long***.
+Note that all timestamp columns are defined as ***long***.
 
 ## Create Avro table in Amazon Athena
 
@@ -244,7 +244,7 @@ Amazon Athena does not support table property ***avro.schema.url*** - the schema
       }
     ');
 ```
-Note, that all timestamp columns in the table definition are defined as ***bigint*** . The explanation of this you can find below. 
+Note that all timestamp columns in the table definition are defined as ***bigint*** . The explanation of this you can find below. 
 
 
 ## Working with timestamps in Avro
@@ -457,7 +457,7 @@ After applying this parameter and running Sqoop the table schema will look like 
       "tableName" : "QueryResult"
     }
 ```
-Note, that fields columns in the table schema are defined as string.
+Note that timestamp columns in the table schema are defined as ***string***.
 
 Sqoop command for storing timestamp fields in string format:
 ```shell
@@ -565,7 +565,7 @@ Create new table in Amazon Athena using the new table schema:
       }
     ');  
 ```
-Note, that timestamp columns in the table definition are defined as “string”.
+Note, that timestamp columns in the table definition are defined as ***string***.
 
 Select the data without using timestamp conversion:
 ```sql
