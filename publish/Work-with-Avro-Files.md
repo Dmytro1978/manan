@@ -591,4 +591,6 @@ Files can be local or in S3:
 hadoop jar avro-tools-1.8.1.jar concat s3://my-bucket/staging/employee/part-m-00000.avro s3://my-bucket/staging/employee/part-m-00001.avro s3://my-bucket/staging/employee/employee_final.avro
 ```
 
-That's all for now!
+## Summary
+
+This article explained how to transfer data from a relational database (Oracle) to S3 or HDFS and store it in Avro data format using Apache Sqoop. The article also demonstrated how to work with Avro table schema and how to handle timestamp fields in Avro (keeping them in Unix time (or Epoc time) or converting them to ***string*** data type).
