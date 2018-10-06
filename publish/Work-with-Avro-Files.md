@@ -80,7 +80,7 @@ sqoop import \
   --null-string '' \
   --null-non-string '' 
 ```
-Note, that there is a parameter ***--delete-target-dir*** in the command that deletes the target directory and can only be used if the target directory is located in HDFS.
+Note, that there is a parameter ***--delete-target-dir*** in the command that deletes the target directory and can only be used if the target directory is located in HDFS. 
 
 
 Sqoop can transfer data either to Hadoop (HDFS) or to AWS (S3). To query transferred data you need to create tables on top of physical files. If the data was transferred to Hadoop you can create Hive tables. If the data was transferred to S3 you can create either Hive tables of Amazon Athena tables. In both cases you will need a table schema which you can retrieve from physical files.
