@@ -590,20 +590,5 @@ Files can be local or in S3:
 hadoop jar avro-tools-1.8.1.jar concat s3://my-bucket/staging/employee/part-m-00000.avro s3://my-bucket/staging/employee/part-m-00001.avro s3://my-bucket/staging/employee/employee_final.avro
 ```
 
-## Data types in Java and Hive
-
-Integral types
-
-| **Hive** | **Java** |
-| -------- | -------- |
-| TINYINT  | byte     |
-| SMALLINT | short    |
-| INT      | int      |
-| BIGINT   | long     |
-
-
-Floating types are – ***FLOAT***, ***DOUBLE*** & ***DECIMAL***. – Equivalent to Java’s float and double , and SQL’s Decimal respectively.
-
-***DECIMAL(5,2)*** represents total of 5 digits, out of which 2 are decimal digits. Below is the chart for all numeric types with their ranges and examples.
-[http://hadooptutorial.info/hive-data-types-examples/](http://hadooptutorial.info/hive-data-types-examples/)
+(c) Dmytro Manannykov, Big Data Architect
 
