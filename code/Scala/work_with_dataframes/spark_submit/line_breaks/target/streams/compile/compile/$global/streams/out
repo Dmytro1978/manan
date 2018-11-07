@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/Users/mdmytro/Documents/Code/Scala/example_project/line_breaks/src/main/scala/line_breaks.scala:71:13: dfTypes is already defined as variable dfTypes[0m
+[0m[[0m[31merror[0m] [0m[0m        var dfTypes = df_pq_resolved2.dtypes //get column data types[0m
+[0m[[0m[31merror[0m] [0m[0m            ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
