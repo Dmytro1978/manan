@@ -2,18 +2,18 @@
 #set -vx
 
 # JTDS driver - jtds-1.3.1.jar - should be copied to /usr/lib/sqoop/lib/ folder
-aws s3 rm s3://barrick-bdf-dev/tmp/prta/ --recursive
+aws s3 rm s3://s3_bucket/folder/folder/ --recursive
 
 sqoop import \
- --connect "jdbc:jtds:sqlserver://10.133.53.43:1433/PowerView" \
+ --connect "jdbc:jtds:sqlserver://<host>:port/<database_name>" \
  --connection-manager org.apache.sqoop.manager.SQLServerManager \
- --query 'select * from dbo.ptra where $CONDITIONS' \
+ --query 'select * from schema.table where $CONDITIONS' \
  --driver net.sourceforge.jtds.jdbc.Driver \
- --username sgroup \
- --password sgroup \
- --target-dir s3://barrick-bdf-dev/tmp/prta \
+ --username <user_name> \
+ --password <pwd> \
+ --target-dir s3://s3_bucket/folder/folder \
  --num-mappers 1 \
  --as-avrodatafile \
  --compression-codec snappy
 
-#--target-dir hdfs:///user/hive/warehouse/ptra \
+#--target-dir hdfs:///user/hive/warehouse/folder \
