@@ -74,3 +74,8 @@ df_pq_resolved2.write.option("header", "true").mode("overwrite").csv("/Users/mdm
 //unpersist both dataframes
 df_pq_line_breaks2.unpersist()
 df_pq_resolved2.unpersist()
+
+df.createOrReplaceTempView("customer")
+
+val df_one = spark.sql("select * from customer where id = 2")
+df_one.show()

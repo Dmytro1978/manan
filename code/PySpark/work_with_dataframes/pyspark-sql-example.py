@@ -13,6 +13,7 @@ country_id,country_name,country_code
 '''
 
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import regexp_replace, col
 
 spark = SparkSession.builder.appName("Python Spark SQL basic example").config("spark.some.config.option", "some-value").getOrCreate()
 df = spark.read.csv("s3://tmp-landing-zone/thedates/thedates.csv")
@@ -76,6 +77,25 @@ sqlDF.show()
     |1978-02-26|
     |1978-02-27|
     |1978-02-28|
+    +----------+  
+'''
+
+
+regexDF = sqlDF.withColumn("_c0", regexp_replace("_c0","-02-","-03-"))
+regexDF.show()
+
+''' +----------+
+    |       _c0|
+    +----------+
+    |1978-03-20|
+    |1978-03-21|
+    |1978-03-22|
+    |1978-03-23|
+    |1978-03-24|
+    |1978-03-25|
+    |1978-03-26|
+    |1978-03-27|
+    |1978-03-28|
     +----------+  
 '''
 
