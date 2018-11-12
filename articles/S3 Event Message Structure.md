@@ -22,7 +22,7 @@ Note that:
          "eventVersion":"2.0",
          "eventSource":"aws:s3",
          "awsRegion":"us-east-1",
-         "eventTime": <The time, in ISO-8601 format, for example, 1970-01-01T00:00:00.000Z, when S3 finished processing the request>,
+         "eventTime": "The time, in ISO-8601 format, for example, 1970-01-01T00:00:00.000Z, when S3 finished processing the request",
          "eventName":"event-type",
          "userIdentity":{  
             "principalId":"Amazon-customer-ID-of-the-user-who-caused-the-event"
@@ -46,7 +46,7 @@ Note that:
             },
             "object":{  
                "key":"object-key",
-               "size": <object-size>,
+               "size": "object-size",
                "eTag":"object eTag",
                "versionId":"object version if bucket is versioning-enabled, otherwise null",
                "sequencer": "a string representation of a hexadecimal value used to determine event sequence, 
@@ -55,7 +55,7 @@ Note that:
          }
       },
       {
-          // Additional events
+          /* Additional events */
       }
    ]
 }  
