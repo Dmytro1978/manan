@@ -1,11 +1,11 @@
 # DynamoDB Data Types
 DynamoDB supports many different data types for attributes within a table. They can be categorized as
 follows:
-* Scalar Types – A scalar type can represent exactly one value. The scalar types are _number_, _string_,
+* __Scalar Types__ – A scalar type can represent exactly one value. The scalar types are _number_, _string_,
 _binary_, _Boolean_, and _null_.
-* Document Types – A document type can represent a complex structure with nested attributes—such
+* __Document Types__ – A document type can represent a complex structure with nested attributes—such
 as you would find in a JSON document. The document types are list and map.
-* Set Types – A set type can represent multiple scalar values. The set types are _string_ set, _number_ set,
+* __Set Types__ – A set type can represent multiple scalar values. The set types are _string_ set, _number_ set,
 and _binary_ set.
 
 ## Scalar Types
