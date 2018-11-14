@@ -8,6 +8,11 @@ as you would find in a JSON document. The document types are list and map.
 * __Set Types__ – A set type can represent multiple scalar values. The set types are _string_ set, _number_ set,
 and _binary_ set.
 
+DynamoDB is a NoSQL database and is _schemaless_. This means that, other than the primary key
+attributes, you don't have to define any attributes or data types when you create tables. By comparison,
+relational databases require you to define the names and data types of each column when you create a
+table.
+
 ## Scalar Types
 ###  String
 Strings are Unicode with UTF-8 binary encoding. The length of a string must be greater than zero and is
@@ -17,6 +22,21 @@ The following additional constraints apply to primary key attributes that are de
 bytes.
 * For a composite primary key, the maximum length of the second attribute value (the sort key) is 1024
 bytes.
+
+### Number
+Numbers can be positive, negative, or zero. Numbers can have up to 38 digits precision. Exceeding this
+results in an exception.
+* Positive range: 1E-130 to 9.9999999999999999999999999999999999999E+125
+* Negative range: -9.9999999999999999999999999999999999999E+125 to -1E-130
+
+In DynamoDB, numbers are represented as variable length. Leading and trailing zeroes are trimmed.
+All numbers are sent across the network to DynamoDB as strings, to maximize compatibility across
+languages and libraries. However, DynamoDB treats them as number type attributes for mathematical
+operations.
+
+__Note__ 
+
+If number precision is important, you should pass numbers to DynamoDB using strings that you convert from number type.
 
 ### Binary
 Binary type attributes can store any binary data, such as compressed text, encrypted data, or images.
