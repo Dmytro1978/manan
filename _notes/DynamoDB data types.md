@@ -80,15 +80,15 @@ contains a string, a number, and a nested list that contains another map:
 
 ```json
 {
-    Day: "Monday",
-    UnreadEmails: 42,
-    ItemsOnMyDesk: [
+    "Day": "Monday",
+    "UnreadEmails": 42,
+    "ItemsOnMyDesk": [
         "Coffee Cup",
         "Telephone",
         {
-            Pens: { Quantity : 3},
-            Pencils: { Quantity : 2},
-            Erasers: { Quantity : 1}
+            "Pens": { "Quantity" : 3},
+            "Pencils": { "Quantity" : 2},
+            "Erasers": { "Quantity" : 1}
         }
     ]
 }
