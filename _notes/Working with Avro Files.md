@@ -1,7 +1,20 @@
-# How to Work With Avro Files
+# Working with Avro Files in Hadoop and Amazon Athena
 
-This short article describes how to transfer data from Oracle database to S3 using Apache Sqoop utility. The data will be stored in Avro data format.
+## Introduction
+This short article describes how to transfer data from Oracle database to S3 using Apache Sqoop utility. The data in S3 will be stored in Avro data format.
 
+### Apache Sqoop
+_Apache Sqoop_ is a command-line interface application for transferring data between relational databases and Hadoop. Sqoop allows easy import and export of data from structured data stores such as relational databases, enterprise data warehouses, and NoSQL systems. Using Sqoop, you can provision the data from external system on to HDFS, and populate tables in Hive and HBase. Sqoop integrates with Oozie, allowing you to schedule and automate import and export tasks. Sqoop uses a connector-based architecture which supports plugins that provide connectivity to new external systems.
+
+### Apache Avro
+_Avro_ is a row-based storage format for Hadoop which is widely used as a serialization platform. Avro stores the data definition (schema) in JSON format making it easy to read and interpret by any program. The data itself is stored in binary format making it compact and efficient. A key feature of Avro is robust support for data schemas that change over time - schema evolution. Avro handles schema changes like missing fields, added fields and changed fields; as a result, old programs can read new data and new programs can read old data. 
+This format is the ideal candidate for storing data in a data lake landing zone, because:
+1.	Data from the landing zone is usually read as a whole for further processing by downstream systems (the row-based format is more efficient in this case);
+2.	Downstream systems can easily retrieve table schemas from files (there is no need to store the schemas separately in an external meta store);
+3.	Avro data format successfully handles line breaks (\n) and other non-printable characters in data (for example, a string field can contain formatted JSON or XML file);
+4.	Any source schema change is easily handled (schema evolution).
+
+### Environment
 The data transfer was done using the following technologies:
 
 * Apache Sqoop 1.4.7
@@ -267,7 +280,7 @@ Amazon Athena does not support the table property _avro.schema.url_ — the sche
 __Note__ that all timestamp columns in the table definition are defined as _bigint_. The explanation for this is given below.
 
 ## Working With Timestamps in Avro
-When Sqoop imports data from Oracle to Avro (using --as-avrodatafile) it stores all "timestamp" values in Unix time format (Epoch time), i.e. _long_.
+When Sqoop imports data from Oracle to Avro (using _--as-avrodatafile_) it stores all _timestamp_ values in Unix time format (Epoch time), i.e. _long_.
 
 ### In Hive
 
