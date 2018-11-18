@@ -39,7 +39,7 @@ __Note__
 If number precision is important, you should pass numbers to DynamoDB using strings that you convert from number type.
 
 ### Binary
-Binary type attributes can store any binary data, such as compressed text, encrypted data, or images.
+Binary type attributes can store any binary data, such as _compressed text_, _encrypted data_, or _images_.
 Whenever DynamoDB compares binary values, it treats each byte of the binary data as unsigned.
 The length of a binary attribute must be greater than zero, and is constrained by the maximum
 DynamoDB item size limit of 400 KB.
