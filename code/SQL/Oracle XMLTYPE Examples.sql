@@ -1,23 +1,29 @@
-# XML Oracle Data Types & Sqoop
 
-Sqoop does not work directly with Oracle XMLTYPE data type. You need to convert 
-XMLTYPE data type to String. 
-
-First, create a table:
-
-```sql
-create table xml_test
+--Convert XML data to XMLTYPE and then convert to string
+with sq1 as 
 (
-    id number(18),
-    name varchar2(200),
-    xml_body xmltype
+    select 
+        xmltype('
+            <note> 
+                <to>Tove</to> 
+                <from>Jani</from> 
+                <heading>Reminder</heading> 
+                <body>Don''t forget me this weekend!</body> 
+            </note>
+        ') as xml_body
+    from dual
 )
-```
-Insert a couple of records with XML data into the table:
+select t.xml_body.GetStringVal() as xml_body from sq1 t;
 
-Record 1
+-- Create a table with XMLTYPE data type 
+CREATE TABLE XML_TEST
+(
+    ID NUMBER(10),
+    NAME VARCHAR2(200),
+    XML_BODY XMLTYPE
+);
 
-```sql
+-- Insert XML data into the tables
 insert into xml_test
 select 
     1, 
@@ -31,11 +37,7 @@ select
         </note>
     ')
 from dual;
-```
 
-Record 2
-
-```sql
 insert into xml_test
 select 
     2, 
@@ -71,17 +73,5 @@ select
     ')
 from dual;
 
-commit;
-```
-
-Then use following sqoop parameter:
-```sh
---query 'select t.id, t.name, t.xml_body.getStringVal() as xml_body from xml_test t'
-```
-
-Another approach is to convert XMLTYPE data type to CLOB and then use column mapping to convert CLOB to string in Sqoop command.
-
-Use following sqoop parameters:
-```sh
---map-column-java XML_BODY=String 
---query 'select t.id, t.name, t.xml_body.getCLOBVal() as xml_body from xml_test t'
+-- Select data and convert XMLTYPE data type to string
+select t.id, t.name, t.xml_body.getStringVal() xml_body from xml_test t;

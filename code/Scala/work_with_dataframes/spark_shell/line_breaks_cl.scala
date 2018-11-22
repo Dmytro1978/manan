@@ -1,81 +1,66 @@
-//this code can be run is spark-shell:
-//1. Run spark-shell
-//2. Type the following:  
-//  :load line_breaks_cl.scala
+// This code can be run is spark-shell line by line
+// or from file: 
+// 1. Run spark-shell
+// 2. Type the following:  
+//   :load line_breaks_cl.scala
 
 import org.apache.spark.sql.SparkSession
 
 val spark = SparkSession.builder().appName("Spark SQL basic example").config("spark.some.config.option", "some-value").getOrCreate()
 
+//read data from csv file into a dataframe
 val df = spark.read.option("header", "true").csv("/Users/mdmytro/customer2.csv")
 
-var dfTypes = df.dtypes //get column data types 
+df.show()
 
-var elem1 = dfTypes(0) //first column data type
+//create a dataframe with line breaks 
+val df_line_breaks = df.withColumn("DESC", regexp_replace(col("DESC"), "is", "\n"))
 
-print(elem1._1) //print column name
-print(elem1._2) //print column data type 
+df_line_breaks.show()
 
-//print all column data types in a loop
-for (i <- 0 to dfTypes.length -1) 
-    print(dfTypes(i))
+//cache the dataframe:
+df_line_breaks.persist() //persist() caches the dataframe in memory and on disc
+//df_line_breaks.cache() //cache() - in memory only.
+//persist() is better option than cache() because it will spill the RDD partitions to the Worker's local disk if they're evicted from memory
+//cache() is an alias for persist(StorageLevel.MEMORY_ONLY)
+//persist() definition: persist(StorageLevel.MEMORY_AND_DISK_ONLY)
+df_line_breaks.count()
 
-//store data in parquet format
-df.write.mode("overwrite").parquet("/Users/mdmytro/customer2_pq")
+// show whether the dataframe is cached or not 
+// the "dataframe.storageLevel.useMemory" feature is available in Spark (Scala) 2.1.0 and higher:
+print(df_line_breaks.storageLevel.useMemory) 
 
-//read stored data
-val df_pq = spark.read.parquet("/Users/mdmytro/customer2_pq/")
+//delete file from disc to test the caching
 
-//print the data
-df_pq.show()
+//replacing line breaks with some data in all columns at once
+//val df_resolved = df_line_breaks
+//    .columns
+//    .foldLeft(df_line_breaks) { (memoDF, colName) => 
+//        memoDF.withColumn(
+//            colName,
+//            regexp_replace(col(colName), "\n", "is")
+//        )
+//    }
 
-//create a dataframe with like breaks 
-var df_pq_line_breaks = df_pq.withColumn("DESC", regexp_replace(col("DESC"), "is", "\n"))
+//replace line breaks with some data in all columns at once
+val df_resolved = df_line_breaks.columns.foldLeft(df_line_breaks) { (memoDF, colName) => memoDF.withColumn(colName,regexp_replace(col(colName), "\n", "is"))}
 
-df_pq_line_breaks.show()
+df_resolved.show()
 
-//store the data with line breaks in parquet format 
-df_pq_line_breaks.write.mode("overwrite").parquet("/Users/mdmytro/customer2_pq_line_breaks")
+//store data on disc
+df_resolved.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer2_resolved")
 
-//read the data from parquet file
-val df_pq_line_breaks2 = spark.read.parquet("/Users/mdmytro/customer2_pq_line_breaks/")
+//repartition the dataframe
+val df_partitioned = df_resolved.repartition(2)
 
-df_pq_line_breaks2.persist() //cache the dataframe in memory and on disc 
+//print number lf partitions
+print(df_partitioned.rdd.partitions.size)
 
-//replace all line breaks with some data 
-val df_pq_resolved  = df_pq_line_breaks2.withColumn("DESC", regexp_replace(col("DESC"), "\n", "is"))
+//store repartitioned dataset on disc (there will be number of files equal to number of partitions)
+df_partitioned.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer2_partitioned")
 
-df_pq_resolved.show()
+//uncache the dataframe
+df_line_breaks.unpersist()
 
-//store resolved data in csv file
-df_pq_resolved.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer_final.csv")
 
-//copy the dataframe (with line breaks) to the new one
-var df_pq_resolved2 = df_pq_line_breaks2.select(col("*"))
 
-df_pq_resolved2.show()
-
-df_pq_resolved2.cache() //cache the dataframe in memory (only)
-
-var tupCol = ("","")
-dfTypes = df_pq_resolved2.dtypes //get column data types
-
-//replace line breaks in all string columns in a loop
-for (i <- 0 to dfTypes.length -1)
-    tupCol = dfTypes(i)
-    if (tupCol._2 == "StringType" )
-        df_pq_resolved2 = df_pq_resolved2.withColumn(tupCol._1, regexp_replace(col(tupCol._1), "\n", "is"))
-
-df_pq_resolved2.show()
-
-//store fixed data in a csv file 
-df_pq_resolved2.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer_final2.csv")
-
-//unpersist both dataframes
-df_pq_line_breaks2.unpersist()
-df_pq_resolved2.unpersist()
-
-df.createOrReplaceTempView("customer")
-
-val df_one = spark.sql("select * from customer where id = 2")
-df_one.show()
