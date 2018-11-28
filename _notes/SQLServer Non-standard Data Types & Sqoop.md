@@ -64,6 +64,6 @@ This will not work:
 sqoop import ... --map-column-java var_item=String 
 ```
 This will work:
-```sql
-SELECT CAST(var_item AS VARCHAR) AS var_item_str FROM test_variant;
+```sh
+sqoop import ... --query 'SELECT CAST(var_item AS VARCHAR) AS var_item_str FROM test_variant'
 ```

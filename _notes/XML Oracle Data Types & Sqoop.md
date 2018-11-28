@@ -76,12 +76,15 @@ commit;
 
 Then use Oracle _getStringVal()_ function in Sqoop SQL query:
 ```sh
---query 'select t.id, t.name, t.xml_body.getStringVal() as xml_body from xml_test t'
+sqoop import ... --query 'select t.id, t.name, t.xml_body.getStringVal() as xml_body from xml_test t'
 ```
 
 Another approach is to convert XMLTYPE data type to CLOB and then use Sqoop column mapping parameter to convert CLOB to string in Sqoop command.
 
 Use following sqoop parameters:
 ```sh
---map-column-java XML_BODY=String 
---query 'select t.id, t.name, t.xml_body.getCLOBVal() as xml_body from xml_test t'
+sqoop import \
+    --map-column-java XML_BODY=String \
+    --query 'select t.id, t.name, t.xml_body.getCLOBVal() as xml_body from xml_test t'
+    ...
+```
