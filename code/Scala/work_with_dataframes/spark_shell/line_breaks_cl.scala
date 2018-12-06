@@ -24,6 +24,7 @@ df_line_breaks.persist() //persist() caches the dataframe in memory and on disc
 //persist() is better option than cache() because it will spill the RDD partitions to the Worker's local disk if they're evicted from memory
 //cache() is an alias for persist(StorageLevel.MEMORY_ONLY)
 //persist() definition: persist(StorageLevel.MEMORY_AND_DISK_ONLY)
+//call a count method to be sure that the dataframe is completely persisted
 df_line_breaks.count()
 
 // show whether the dataframe is cached or not 
@@ -49,15 +50,6 @@ df_resolved.show()
 
 //store data on disc
 df_resolved.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer2_resolved")
-
-//repartition the dataframe
-val df_partitioned = df_resolved.repartition(2)
-
-//print number lf partitions
-print(df_partitioned.rdd.partitions.size)
-
-//store repartitioned dataset on disc (there will be number of files equal to number of partitions)
-df_partitioned.write.option("header", "true").mode("overwrite").csv("/Users/mdmytro/customer2_partitioned")
 
 //uncache the dataframe
 df_line_breaks.unpersist()
