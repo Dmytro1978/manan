@@ -1,4 +1,4 @@
-# S3 Event Message Structure
+## S3 Event Message Structure
 The notification message Amazon S3 sends to publish an event is a JSON message with the following structure. Note the following:
 
 * The responseElements key value is useful if you want to trace the request by following up with Amazon S3 support. Both x-amz-request-id and x-amz-id-2 help Amazon S3 to trace the individual request. These values are the same as those that Amazon S3 returned in the response to your original PUT request, which initiated the event.

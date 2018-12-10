@@ -1,4 +1,4 @@
-# XML Oracle Data Types & Sqoop
+## XML Oracle Data Types & Sqoop
 
 Sqoop does not work directly with Oracle XMLTYPE data type. You need to convert 
 XMLTYPE data type to String. 
@@ -15,7 +15,7 @@ create table xml_test
 ```
 Insert a couple of records with XML data into the table:
 
-Record 1
+#### Record 1
 
 ```sql
 insert into xml_test
@@ -33,7 +33,7 @@ select
 from dual;
 ```
 
-Record 2
+#### Record 2
 
 ```sql
 insert into xml_test

@@ -1,6 +1,6 @@
-# SQL Server 2000 JDBC drivers
+## SQL Server 2000 JDBC drivers
 
-## JDBC Driver
+### JDBC Driver
 The Microsoft JDBC Driver for SQL Server is available to all SQL Server users at no additional charge from Microsoft. It provides access to SQL Server 2000-2016 from any Java application.
 
 Required File(s):
@@ -17,7 +17,7 @@ jdbc:sqlserver://<host>[:<port1433>];databaseName=<database>
 ```
 
 
-## jTDS JDBC Driver
+### jTDS JDBC Driver
 jTDS is an open source 100% pure Java (type 4) JDBC 3.0 driver for Microsoft SQL Server (6.5, 7, 2000-2016) and Sybase (10, 11, 12, 15).
 Required File(s):
 ```
@@ -50,7 +50,7 @@ Example of Sqoop command that stores data in S3:
 sqoop import --connect "jdbc:jtds:sqlserver://10.133.53.43:1433/PowerView" --connection-manager org.apache.sqoop.manager.SQLServerManager --query 'select * from dbo.ptra where $CONDITIONS' --driver net.sourceforge.jtds.jdbc.Driver --username sgroup --password <password> --target-dir s3://dmytro-dw/staging/ptra --num-mappers 1
 ```
 
-## SQL Server versions mapping
+### SQL Server versions mapping
 
 ```
 80 = SQL Server 2000    =  8.00.xxxx
