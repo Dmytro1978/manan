@@ -34,9 +34,7 @@ All numbers are sent across the network to DynamoDB as strings, to maximize comp
 languages and libraries. However, DynamoDB treats them as number type attributes for mathematical
 operations.
 
-__Note__ 
-
-If number precision is important, you should pass numbers to DynamoDB using strings that you convert from number type.
+_Note_, if number precision is important, you should pass numbers to DynamoDB using strings that you convert from number type.
 
 #### Binary
 Binary type attributes can store any binary data, such as _compressed text_, _encrypted data_, or _images_.
