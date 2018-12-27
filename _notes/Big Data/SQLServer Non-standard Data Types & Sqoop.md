@@ -1,6 +1,6 @@
-## Non standard SQL Server data types & Sqoop: UNIQUEIDENTIFIER and SQL_VARIANT 
+# Non standard SQL Server data types & Sqoop: UNIQUEIDENTIFIER and SQL_VARIANT 
 
-### UNIQUEIDENTIFIER
+## UNIQUEIDENTIFIER
 _UNIQUEIDENTIFIER_ as a primary key in the table:
 
 The _UNIQUEIDENTIFIER_ is a GUID and can’t be used by sqoop to split work units. By default, if number of mappers is not mentioned, sqoop defines 4 mappers and it uses a primary key column in _--split-by_ parameter to split work units. 
