@@ -41,3 +41,7 @@ SSH and RDP connections require private and public key access to authenticate. T
 As a result, AWS suggests that you implement either Remote Desktop Gateway (for connecting to Windows instances) or SSH-agent forwarding (for Linux instances). Both of these solutions eliminate the need for storing private keys on the bastion host. AWS provides great documentation on how to implement Windows Remote Desktop Gateway and SSH-agent forwarding.
 
 ***Recommendation***: As with all cloud deployments, you should always consider the resiliency and high availability of your services. With this in mind, it is recommended deploying a bastion within each public Availability Zone that you are using. Remember: if the AZ hosting your only AWS bastion host goes down, you will lose connectivity to your private instances in other AZs.
+
+### Linux bastion host architecture on AWS
+
+![a](pic/bastion_host2.png)
