@@ -6,7 +6,7 @@ As you get started with Amazon Kinesis Data Streams, you can benefit from unders
 
 The following diagram illustrates the high-level architecture of Kinesis Data Streams. The producers continually push data to Kinesis Data Streams, and the consumers process the data in real time. Consumers (such as a custom application running on Amazon EC2 or an Amazon Kinesis Data Firehose delivery stream) can store their results using an AWS service such as Amazon DynamoDB, Amazon Redshift, or Amazon S3.
 
-![adadad](pic/kinesis_streams_1.png)
+![pic](pic/kinesis_streams_1.png)
 
 ## Kinesis Data Streams Terminology
 
@@ -47,6 +47,8 @@ If your data rate increases, you can increase or decrease the number of shards a
 ### Partition Key
 
 A partition key is used to group data by shard within a stream. Kinesis Data Streams segregates the data records belonging to a stream into multiple shards. It uses the partition key that is associated with each data record to determine which shard a given data record belongs to. Partition keys are Unicode strings with a maximum length limit of 256 bytes. An MD5 hash function is used to map partition keys to 128-bit integer values and to map associated data records to shards. When an application puts data into a stream, it must specify a partition key.
+
+![adadad](pic/kinesis_streams_2.png)
 
 ### Sequence Number
 
