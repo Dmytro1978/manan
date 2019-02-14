@@ -3,6 +3,7 @@
 You can check the status, start and stop the **Hive metastore** using the following commands in EMR:
 
 ```sh
+# initctl - init daemon control tool
 sudo initctl status hive-hcatalog-server # check the status
 
 sudo initctl stop hive-hcatalog-server   # stop HCatalog
