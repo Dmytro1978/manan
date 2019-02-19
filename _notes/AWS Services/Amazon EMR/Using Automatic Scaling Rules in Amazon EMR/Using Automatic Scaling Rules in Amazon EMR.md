@@ -79,7 +79,7 @@ Now you should see the autoscaling rules attached to both instance groups:
 
 ## Appendix A
 
-### Automatic Scaling Rules for Core Instance Group
+### Automatic Scaling Rules for Core Instance Group (autoscaleconfig-core.json)
 
 ```json
     {
@@ -209,7 +209,7 @@ Now you should see the autoscaling rules attached to both instance groups:
      ]
    }
 ```
-### Automatic Scaling Rules for Task Instance Group
+### Automatic Scaling Rules for Task Instance Group (autoscaleconfig-task.json)
 
 ```json
     {
