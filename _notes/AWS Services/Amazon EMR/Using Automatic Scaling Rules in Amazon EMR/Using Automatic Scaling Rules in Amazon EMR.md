@@ -24,17 +24,17 @@ aws emr put-auto-scaling-policy --cluster-id j-XXXXXXXXXXXX --instance-group-id 
 ### Step 1
 In AWS Management Console navigate to Amazon EMR user interface, click on EMR cluster you want to activate automatic scaling on and switch to Hardware tab:
 
-![Picture](pic/picture1.png)
+![Picture](pic/Picture1.png)
 
 ### Step 2
 In the open tab scroll to the right and find Auto Scaling column. Click on   icon for CORE instance group:
 
-![Picture](pic/picture2.png)
+![Picture](pic/Picture2.png)
 
 ### Step 3
 In the opened window fill out all the fields according to the following autoscaling rules:
 
-![Picture](pic/picture3.png)
+![Picture](pic/Picture3.png)
 
 Scale out automatic scaling policy:
 1. ScaleOutYARNLowMemory: Add 2 instances if YARNMemoryAvailablePercentage is less than or equal to 35 for 1 five-minute periods with a cooldown of 120 seconds
@@ -45,12 +45,12 @@ Scale in automatic scaling policy:
 
 To find ScaleInYARNAvailableMemory and ContainerPendingRatio metrics you need to scroll to the end of the dropdown list:
 
-![Picture](pic/picture4.png)
+![Picture](pic/Picture4.png)
 
 ### Step 4
 The metrics entered for **CORE** instance group should look as follows:
 
-![Picture](pic/picture5.png)
+![Picture](pic/Picture5.png)
 
 Click *Modify* button to save the changes.
 
@@ -67,14 +67,14 @@ Scale in automatic scaling policy:
 ### Step 6
 Once you finish entering the metrics for TASK instance group they should look as follows:
 
-![Picture](pic/picture6.png)
+![Picture](pic/Picture6.png)
 
 Click *Modify* button to save the changes.
 
 ### Step 7
 Now you should see the autoscaling rules attached to both instance groups:
 
-![Picture](pic/picture7.png)
+![Picture](pic/Picture7.png)
 
 
 ## Appendix A
