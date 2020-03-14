@@ -1,0 +1,113 @@
+
+EMP (firstname, lastname, salary, deptid, empid)
+DEPT (deptid, deptname)
+
+1)	
+To help HR implement pay corrections, 
+list count of Employees in 'Engineering' department that have a  high payscale (salaries higher than 15000) 
+and ones that have a low  payscale (less than 1200).
+
+deptid  highPS  lowPS
+
+select d.deptname, 
+sum(case when salary > 1500 then 1 else 0 end) highPS,
+sum(case when salary < 1200 then 1 else 0 end)) lowPS
+from EMP e, DEPT d 
+where
+    e.deptid = d.deptid
+group by d.deptname
+
+2) Find employees that earn more than the average salary in their department.
+
+with sq1 as (
+    select d.deptid, d.deptname, avg(e.salary) avg_sal
+    from EMP e, DEPT d 
+    where
+        e.deptid = d.deptid
+    group by d.deptid, d.deptname
+)
+select s.deptname, e.firstname, e.lastname
+from EMP e, sq1 s
+where
+    e.deptid = s.deptid and
+    e.salary > s.avg_sal
+
+  3) For each employee list the next higher salary in their department.  
+  
+eid did sal result
+e1  d1  10  20         
+e2  d1  20  30         
+e3  d1  30  null 
+e5  d2  500 null 
+
+select e.firstname, e.lastname, e.salary,
+lead(e.salary) over(partition by d.deptid order by e.salary asc) next_Sal
+from EMP e, DEPT d 
+where
+    e.deptid = d.deptid
+
+select e.firstname, e.lastname, e.salary,
+lead(e.salary) over(partition by e.deptid order by e.salary asc) next_Sal
+from EMP e
+
+-----
+
+1) 
+Write a program named fizzbuzz that prints all integers in 1 through 10, inclusive. 
+For odd numbers print “Fizz” instead of the number and for the multiples of five print “Buzz”. 
+For numbers which are both odd and a multiple of five, print “FizzBuzz”.
+
+list = range(1,11)
+
+for n in list:
+    if n%2 > 0 && n%5 == 0: 
+        print 'FizzBuzz'
+    elif n%5 == 0: 
+        print 'Buzz'
+    elif n%2 > 0: 
+        print 'Fizz'
+    else:
+        print n
+        
+        
+Fizz
+2
+Fizz
+4
+FizzBuzz
+6
+Fizz
+8
+Fizz
+Buzz
+
+2) Return the sum of the numbers in the array, except ignore sections of numbers starting with a 6 
+and extending to the next 7 (every 6 will be followed by at least one 7). Return 0 for no numbers.
+
+sample output :
+sum67([1, 2, 2]) → 5
+sum67([1, 2, 2, 6, 99, 99, 7]) → 5
+sum67([1, 1, 6, 7, 2]) → 4
+
+
+def summ(list):
+    flag = false;
+    sm = 0
+    for n in list:
+        if n == 6:
+            flag = true
+            continue
+        elif n == 7:
+            flag == false
+            continue
+        elif flag:
+            continue
+        else
+            sm += n
+            
+            
+
+
+
+
+    

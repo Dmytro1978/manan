@@ -541,3 +541,277 @@ sum67([1, 2, 2])
 sum67([1, 2, 2, 6, 99, 99, 7])
 sum67([1, 1, 6, 7, 2])
 ================================================================================
+
+
+======================================TASK======================================
+Fix the bug in the code:
+
+class MathUtils:
+
+    @staticmethod
+    def average(a, b):
+        return a + b / 2
+
+print(MathUtils.average(2, 1))
+------------------------------------SOLUTION------------------------------------
+# add parathensys to the formula, because to calculate an average value for a set of numbers first sum up all numbers and then divide on the total 
+# of all numbers
+
+class MathUtils:
+
+    @staticmethod
+    def average(a, b):
+        return (a + b) / 2 # <-- the error was here
+
+print(MathUtils.average(2, 1))
+
+
+======================================TASK======================================
+
+def nth_lowest_selling(sales, n):
+
+    dic = {i:sales.count(i) for i in sales} #get counts for each unique book id
+
+    dic = {k: v for k, v in sorted(dic.items(), key=lambda item: item[1])} # sort the dictionary by value
+
+    if n <= 0 or n > len(dic):
+        return None # return None if the n-th lowest selling is out range
+    else:
+        return list(dic)[n-1] # get the book id by n-th lowest selling
+
+        
+print(nth_lowest_selling([5, 4, 3, 2, 1, 5, 4, 3, 2, 5, 4, 3, 5, 4, 5], 2))
+print(nth_lowest_selling([100, 100, 100, 100, 80, 90, 80, 80], 2))
+
+======================================TASK======================================
+
+def count_substring(string, sub_string):
+    cnt = 0
+    
+    return find_substring(string, sub_string, cnt)
+
+def find_substring(string, sub_string, cnt):
+    ind = string.find(sub_string)
+    if ind > -1:
+        cnt += 1
+        string = string[ind+1: len(string)]
+        return find_substring(string, sub_string, cnt)
+    else:
+        return cnt
+
+
+if __name__ == '__main__':
+    string = raw_input().strip()
+    sub_string = raw_input().strip()
+    
+    count = count_substring(string, sub_string)
+    print count
+
+======================================TASK======================================
+Convert a number to binary:
+DecimalToBinary(7) → 111
+DecimalToBinary(6) → 110
+------------------------------------SOLUTION------------------------------------
+
+def DecimalToBinary(num):
+    if num > 1:
+        DecimalToBinary(num // 2)
+    print(num % 2)
+print DecimalToBinary(7)
+
+================================================================================
+
+
+======================================TASK======================================
+List comprehensions
+You are given three integers X, Y and Z representing the dimensions of a cuboid along with an integer N. You have to print a list of all possible 
+coordinates given by (i,j,k) on a 3D grid where the sum of i + j+ k is not equal to N. Here, 0 < i < X; 0 < j < Y; 0 < k < Z; 
+
+list_comprehensions(x,y,z,n)
+list_comprehensions(1,1,1,2) → [[0, 0, 0], [0, 0, 1], [0, 1, 0], [1, 0, 0], [1, 1, 1]]
+
+The basic syntax of a list comprehension is
+
+[ expression for item in list if conditional ]
+
+This is equivalent to
+
+for item in list:
+    if conditional:
+        expression
+------------------------------------SOLUTION------------------------------------
+
+def list_comprehensions(x,y,z,n):
+if __name__ == '__main__':
+
+    print([ [x1,y1,z1] for x1 in range(x+1) for y1 in range(y+1) for z1 in range(z+1) if (x1+y1+z1) != n ])
+
+    '''
+    it's equivalent to the following code:
+    res = []
+    for x1 in range(x+1):
+        for y1 in range(y+1):
+            for z1 in range(z+1):
+                if (x1+y1+z1) != n:
+                    res.append([x1,y1,z1])
+    print(res)
+    '''
+
+================================================================================
+
+======================================TASK======================================
+You are given a string S. 
+Your task is to find out if the string S contains: alphanumeric characters, alphabetical characters, digits, lowercase and uppercase characters.
+
+Input Format
+A single line containing a string S.
+Constraints
+
+0 < len(S) < 1000
+
+Output Format
+In the first line, print True if S has any alphanumeric characters. Otherwise, print False. 
+In the second line, print True if S has any alphabetical characters. Otherwise, print False. 
+In the third line, print True if S has any digits. Otherwise, print False. 
+In the fourth line, print True if S has any lowercase characters. Otherwise, print False. 
+In the fifth line, print True if S has any uppercase characters. Otherwise, print False.
+------------------------------------SOLUTION------------------------------------
+
+def string_validation(s):
+
+    has_alnum = False
+    has_alpha = False
+    has_digit = False
+    has_lower = False
+    has_upper = False
+
+    for n in s:
+        if n.isalnum():
+            has_alnum = True
+        if n.isalpha():
+            has_alpha = True
+        if n.isdigit():
+            has_digit = True
+        if n.islower():
+            has_lower = True
+        if n.isupper():
+            has_upper = True
+        
+        if has_alnum and has_alpha and has_digit and has_lower and has_upper:
+            break
+
+    print(has_alnum)
+    print(has_alpha)
+    print(has_digit)
+    print(has_lower)
+    print(has_upper)
+
+================================================================================
+
+======================================TASK======================================
+Given a non-empty array of integers, every element appears twice except for one. Find that single one:
+
+single_number([2,2,1]) → 1 
+single_number(4,1,2,1,2] → 4 
+------------------------------------SOLUTION------------------------------------
+def single_number(nums):
+
+    dic = {} #use dictionary because operation on it are faster than on a list
+
+    for n in nums: # iterate over all the elements in nums
+        if n in dic: # if some number is already in  dictionary, remove it
+            del dic[n]
+        else:  # if some number in nums is new to the dictionary, append it
+            dic[n] = 1
+    return list(dic)[0] # in result the dictionary will only contain the number which is single in the list
+
+print(single_number([1, 2, 1, 2, 4]))
+
+================================================================================
+
+======================================TASK======================================
+Given an array containing n distinct numbers taken from 0, 1, 2, ..., n, find the one that is missing from the array.
+
+missingNumber([3,0,1]) → 2 
+missingNumber([9,6,4,2,3,5,7,0,1]) → 8
+------------------------------------SOLUTION------------------------------------
+
+def missingNumber(nums):
+
+  nums.sort()
+        
+  etalon_lst = range(len(nums) + 1) # all numbers from 0 to n
+  for n in etalon_lst:
+    if n not in nums:
+      return n
+================================================================================
+
+======================================TASK======================================
+Given an array nums containing n + 1 integers where each integer is between 1 and n (inclusive), prove that at least one duplicate number must exist. 
+Assume that there is only one duplicate number, find the duplicate one.
+
+findDuplicate([1,3,4,2,2]) → 2
+findDuplicate([3,1,3,4,2]) → 3
+
+You must not modify the array (assume the array is read only).
+You must use only constant, O(1) extra space.
+Your runtime complexity should be less than O(n2).
+There is only one duplicate number in the array, but it could be repeated more than once.
+------------------------------------SOLUTION------------------------------------
+def findDuplicate(self, nums):
+        
+  dic = {}
+
+  for n in nums:
+    if n in dic:
+      return n
+    else:
+      dic[n] = 1
+================================================================================
+
+======================================TASK======================================
+Given an unsorted integer array, find the smallest missing positive integer:
+
+firstMissingPositive([1,2,0]) → 3 
+firstMissingPositive([3,4,-1,1]) → 2
+firstMissingPositive([7,8,9,11,12]) → 1
+
+Your algorithm should run in O(n) time and uses constant extra space.
+------------------------------------SOLUTION------------------------------------
+
+def firstMissingPositive(nums):
+    for n in range(len(nums) + 2):
+        if n not in nums and n != 0:
+            return n
+================================================================================
+
+======================================TASK======================================
+singleNumber([4, 1, 2, 1, 2]) → 4
+singleNumber([1, 2, 1, 8, 2]) → 8
+
+------------------------------------SOLUTION------------------------------------
+import operator
+def singleNumber(nums):
+
+    dic = {i: nums.count(i) for i in nums}
+
+    # Python 2.7
+    lst = sorted(dic.items(), key=operator.itemgetter(1))
+    return lst[0][0]
+
+    # Python 3.x
+    dic = {k: v for k, v in sorted(dic.items(), key=lambda item: item[1])}
+    return list(dic.keys())[0]
+
+
+print(singleNumber([4, 1, 2, 1, 2]))
+print(singleNumber([1, 2, 1, 8, 2]))
+================================================================================
+
+======================================TASK======================================
+------------------------------------SOLUTION------------------------------------
+================================================================================
+
+======================================TASK======================================
+------------------------------------SOLUTION------------------------------------
+================================================================================
